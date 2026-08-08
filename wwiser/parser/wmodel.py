@@ -419,17 +419,18 @@ class NodeObject(NodeElement):
 
             elif type == TYPE_STZ:
                 # sorry...
-                stz = ""
-                max = 0
+                stz = bytearray()
                 while True:
-                    elem = r.s8()
-                    if elem == 0 or elem < 0: #ASCII 128b only
+                    elem = r.u8()
+                    if elem == 0:
                         break
-                    stz += chr(elem)
-                    max += 1
-                    if max > 255: #arbitary max
+
+                    stz.append(elem)
+                    if len(stz) > 255: #arbitary max
                         raise ValueError("long string")
-                value = stz
+
+                # internally ReadBankStringUtf8, rare though [Europa Universalis V (PC) markers]
+                value = stz.decode('utf-8')
 
             elif type == TYPE_UNI:
                 # union of f32+u32 determined by Wwise subclass, do some simple guessing instead
