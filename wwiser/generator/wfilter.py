@@ -91,12 +91,13 @@ class GeneratorFilterItem(object):
         # TODO: improve
         # bankname here shouldn't have an extension but filters do, so add it back
 
-        if self.is_pattern:
+        if self.is_pattern or self.use_bank:
             return '%s.bnk' % (bankname)
 
-        # use bank's hash when no wildcards are used, to improve detection
+        # use bank's hash when no wildcards are used, to improve detection #???
         if bankname.isnumeric():
             return bankname
+
         bankhash = wfnv.Fnv().get_hash(bankname)
         return '%s.bnk' % (bankhash)
 
